@@ -11,7 +11,7 @@ My name is Jeff and I make web sites _with interactive graphics_ !!!
 ```{r}
 library(tidyverse)
 library(viridis)
-#library(p8105.datasets)
+library(p8105.datasets)
 
 library(plotly)
 ```
@@ -20,6 +20,38 @@ library(plotly)
 # Let's make some plots
 
 ```{r}
+set.seed(1)
 
+data(nyc_airbnb)
+nyc_airbnb = 
+  nyc_airbnb %>% 
+  mutate(rating = review_scores_location / 2) %>%
+  select(
+    neighbourhood_group, neighbourhood, rating, price, room_type, lat, long) %>%
+  filter(
+    !is.na(rating), 
+    neighbourhood_group == "Manhattan",
+    room_type == "Entire home/apt",
+    price %in% 100:500)  %>% 
+  sample_n(5000)
+```
+```{r}
+nyc_airbnb %>% 
+  plot_ly(x = ~lat, y = ~long, type = "scatter", mode = "markers", color = ~price, alpha = 0.5) 
+#The type of plot is scatter, which has several “modes”: markers produces the same kind of plot as ggplot::geom_point, lines produces the same kind of plot as ggplot::geom_line.
+```
+
+```{r}
+nyc_airbnb %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% #order neighborhoods by price
+  plot_ly(y = ~price, color = ~neighbourhood, type = "box",
+          colors = "Set2")
+```
+
+```{r}
+nyc_airbnb %>% 
+  count(neighbourhood) %>%  #n is implicitly the column name for the counts
+  mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
+  plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
 ```
 
