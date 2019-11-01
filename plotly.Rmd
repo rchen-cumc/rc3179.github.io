@@ -1,10 +1,25 @@
 ---
-title: "About me"
+title: "Plotly Examples"
 output: 
   html_document:
     toc: true
     toc_float: true
-    theme: cerulean
 ---
 
 My name is Jeff and I make web sites _with interactive graphics_ !!!
+
+```{r}
+library(tidyverse)
+library(viridis)
+#library(p8105.datasets)
+
+library(plotly)
+```
+
+
+# Let's make some plots
+
+```{r}
+
+```
+
