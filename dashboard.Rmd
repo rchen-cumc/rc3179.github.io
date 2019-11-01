@@ -1,25 +1,20 @@
 ---
-title: "Plotly Examples"
+title: "My first dashboard"
 output: 
-  html_document:
-    code_folding: hide
-    toc: true
-    toc_float: true
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
 ---
 
-My name is Jeff and I make web sites _with interactive graphics_ !!!
-
-```{r}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(viridis)
 library(p8105.datasets)
 
 library(plotly)
+library(flexdashboard)
+
 ```
-
-
-# Let's make some plots
-
 ```{r}
 set.seed(1)
 
@@ -36,11 +31,21 @@ nyc_airbnb =
     price %in% 100:500)  %>% 
   sample_n(5000)
 ```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
 ```{r}
 nyc_airbnb %>% 
   plot_ly(x = ~lat, y = ~long, type = "scatter", mode = "markers", color = ~price, alpha = 0.5) 
-#The type of plot is scatter, which has several “modes”: markers produces the same kind of plot as ggplot::geom_point, lines produces the same kind of plot as ggplot::geom_line.
 ```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
 
 ```{r}
 nyc_airbnb %>% 
@@ -49,22 +54,12 @@ nyc_airbnb %>%
           colors = "Set2")
 ```
 
+### Chart C
+
 ```{r}
 nyc_airbnb %>% 
   count(neighbourhood) %>%  #n is implicitly the column name for the counts
   mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
   plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
-```
-
-```{r}
-scatter_ggplot = 
-  nyc_airbnb %>%
-  ggplot(aes(x = lat, y = long, color = price)) +
-  geom_point(alpha = 0.25) +
-  scale_color_viridis() +
-  coord_cartesian() +
-  theme_classic()
-
-ggplotly(scatter_ggplot)
 ```
 
